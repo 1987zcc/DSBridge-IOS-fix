@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8142EA1E214212E700BEE5C0 /* JsApiTestSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8142EA1D214212E700BEE5C0 /* JsApiTestSwift.swift */; };
 		815612EB2020304600C4F5CD /* InternalApis.m in Sources */ = {isa = PBXBuildFile; fileRef = 815612EA2020304600C4F5CD /* InternalApis.m */; };
 		815612EE202041B000C4F5CD /* DSCallInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 815612ED202041B000C4F5CD /* DSCallInfo.m */; };
 		815612F12022E42D00C4F5CD /* JsEchoApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 815612F02022E42D00C4F5CD /* JsEchoApi.m */; };
@@ -58,7 +57,6 @@
 /* Begin PBXFileReference section */
 		812F1D3B216F1F9D00B5BD0C /* publish.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = publish.sh; sourceTree = "<group>"; };
 		8142EA1C214212E600BEE5C0 /* dsbridgedemo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "dsbridgedemo-Bridging-Header.h"; sourceTree = "<group>"; };
-		8142EA1D214212E700BEE5C0 /* JsApiTestSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsApiTestSwift.swift; sourceTree = "<group>"; };
 		815612E92020304600C4F5CD /* InternalApis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InternalApis.h; sourceTree = "<group>"; };
 		815612EA2020304600C4F5CD /* InternalApis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InternalApis.m; sourceTree = "<group>"; };
 		815612EC202041B000C4F5CD /* DSCallInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSCallInfo.h; sourceTree = "<group>"; };
@@ -168,7 +166,6 @@
 				818F0BCF1E1A820B00679925 /* test.html */,
 				815612EF2022E42D00C4F5CD /* JsEchoApi.h */,
 				815612F02022E42D00C4F5CD /* JsEchoApi.m */,
-				8142EA1D214212E700BEE5C0 /* JsApiTestSwift.swift */,
 				8142EA1C214212E600BEE5C0 /* dsbridgedemo-Bridging-Header.h */,
 			);
 			path = dsbridgedemo;
@@ -253,6 +250,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -305,7 +303,6 @@
 				818F0BA51E18C0AA00679925 /* AppDelegate.m in Sources */,
 				815612F12022E42D00C4F5CD /* JsEchoApi.m in Sources */,
 				818F0BA21E18C0AA00679925 /* main.m in Sources */,
-				8142EA1E214212E700BEE5C0 /* JsApiTestSwift.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,7 @@
     NSMutableDictionary *handerMap;
     NSMutableArray<DSCallInfo *> * callInfoList;
     NSDictionary<NSString*,NSString*> *dialogTextDic;
-    UITextField *txtName;
+    NSString *txtName;
     UInt64 lastCallTime ;
     NSString *jsCache;
     bool isPending;
@@ -96,17 +96,35 @@ completionHandler:(void (^)(NSString * _Nullable result))completionHandler
             if(jsDialogBlock){
                 promptHandler=completionHandler;
             }
-            UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:prompt
-                                  message:@""
-                                  delegate:self
-                                  cancelButtonTitle:dialogTextDic[@"promptCancelBtn"]?dialogTextDic[@"promptCancelBtn"]:@"取消"
-                                  otherButtonTitles:dialogTextDic[@"promptOkBtn"]?dialogTextDic[@"promptOkBtn"]:@"确定",
-                                  nil];
-            [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-            txtName = [alert textFieldAtIndex:0];
-            txtName.text=defaultText;
-            [alert show];
+            
+            NSString *alertTitle = prompt;
+            NSString *cancelTitle = dialogTextDic[@"promptCancelBtn"]?dialogTextDic[@"promptCancelBtn"]:@"取消";
+            NSString *defultTitle = dialogTextDic[@"promptOkBtn"]?dialogTextDic[@"promptOkBtn"]:@"确定";
+            
+            __weak __typeof__(self) weakSelf = self;
+            UIAlertController* alertview = [UIAlertController alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            
+            [alertview addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                textField.placeholder = defaultText;
+            }];
+
+            UIAlertAction *cancelBtn = [UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf alertViewAtIndex:0];
+            }];
+            [alertview addAction:cancelBtn];
+            
+            UIAlertAction *defultBtn = [UIAlertAction actionWithTitle:defultTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                for(UITextField *text in alertview.textFields){
+                    NSLog(@"text = %@", text.text);
+                    self->txtName = text.text;
+                }
+                
+                [weakSelf alertViewAtIndex:1];
+            }];
+            [alertview addAction:defultBtn];
+            
+            
         }
     }
 }
@@ -130,13 +148,11 @@ completionHandler:(void (^)(void))completionHandler
         if(jsDialogBlock){
             alertHandler=completionHandler;
         }
-        UIAlertView *alertView =
-        [[UIAlertView alloc] initWithTitle:dialogTextDic[@"alertTitle"]?dialogTextDic[@"alertTitle"]:@"提示"
-                                   message:message
-                                  delegate:self
-                         cancelButtonTitle:dialogTextDic[@"alertBtn"]?dialogTextDic[@"alertBtn"]:@"确定"
-                         otherButtonTitles:nil,nil];
-        [alertView show];
+        
+        NSString *alertTitle = dialogTextDic[@"alertTitle"]?dialogTextDic[@"alertTitle"]:@"提示";
+        NSString *cancelTitle = dialogTextDic[@"alertBtn"]?dialogTextDic[@"alertBtn"]:@"确定";
+        [self alertTitle:alertTitle message:message cancelTitle:cancelTitle defultTitle:nil];
+        
     }
 }
 
@@ -157,13 +173,12 @@ initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completi
         if(jsDialogBlock){
             confirmHandler=completionHandler;
         }
-        UIAlertView *alertView =
-        [[UIAlertView alloc] initWithTitle:dialogTextDic[@"confirmTitle"]?dialogTextDic[@"confirmTitle"]:@"提示"
-                                   message:message
-                                  delegate:self
-                         cancelButtonTitle:dialogTextDic[@"confirmCancelBtn"]?dialogTextDic[@"confirmCancelBtn"]:@"取消"
-                         otherButtonTitles:dialogTextDic[@"confirmOkBtn"]?dialogTextDic[@"confirmOkBtn"]:@"确定", nil];
-        [alertView show];
+
+        NSString *alertTitle = dialogTextDic[@"confirmTitle"]?dialogTextDic[@"confirmTitle"]:@"提示";
+        NSString *cancelTitle = dialogTextDic[@"confirmCancelBtn"]?dialogTextDic[@"confirmCancelBtn"]:@"取消";
+        NSString *defultTitle = dialogTextDic[@"confirmOkBtn"]?dialogTextDic[@"confirmOkBtn"]:@"确定";
+        [self alertTitle:alertTitle message:message cancelTitle:cancelTitle defultTitle:defultTitle];
+
     }
 }
 
@@ -208,25 +223,6 @@ initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completi
     if( self.DSUIDelegate
        && [self.DSUIDelegate respondsToSelector:@selector(webView:commitPreviewingViewController:)]){
         return [self.DSUIDelegate webView:webView commitPreviewingViewController:previewingViewController];
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(dialogType==1 && alertHandler){
-        alertHandler();
-        alertHandler=nil;
-    }else if(dialogType==2 && confirmHandler){
-        confirmHandler(buttonIndex==1?YES:NO);
-        confirmHandler=nil;
-    }else if(dialogType==3 && promptHandler && txtName) {
-        if(buttonIndex==1){
-            promptHandler([txtName text]);
-        }else{
-            promptHandler(@"");
-        }
-        promptHandler=nil;
-        txtName=nil;
     }
 }
 
@@ -481,6 +477,87 @@ initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL))completi
     [self callHandler:@"_hasJavascriptMethod" arguments:@[handlerName] completionHandler:^(NSNumber* _Nullable value) {
         callback([value boolValue]);
     }];
+}
+
+
+-(void)alertTitle:(NSString *)title
+          message:(NSString *)message
+        cancelTitle:(NSString *)cancelTitle
+        defultTitle:(NSString *)defultTitle
+{
+    
+    __weak __typeof__(self) weakSelf = self;
+    
+    UIAlertController *alertview = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    if (cancelTitle != nil && cancelTitle.length > 0) {
+        UIAlertAction *cancelBtn = [UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf alertViewAtIndex:0];
+        }];
+        [alertview addAction:cancelBtn];
+    }
+    
+    
+    if (defultTitle != nil && defultTitle.length > 0) {
+        UIAlertAction *defultBtn = [UIAlertAction actionWithTitle:defultTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            if (alertview.actions.count > 1) {
+                [weakSelf alertViewAtIndex:1];
+            }else{
+                [weakSelf alertViewAtIndex:0];
+            }
+        }];
+        
+        [alertview addAction:defultBtn];
+    }
+    
+    
+    [[self getCurrentVC] presentViewController:alertview animated:YES completion:nil];
+}
+
+- (void)alertViewAtIndex:(long)buttonIndex
+{
+    if(dialogType==1 && alertHandler){
+        alertHandler();
+        alertHandler=nil;
+    }else if(dialogType==2 && confirmHandler){
+        confirmHandler(buttonIndex==1?YES:NO);
+        confirmHandler=nil;
+    }else if(dialogType==3 && promptHandler && txtName) {
+        if(buttonIndex==1){
+            promptHandler(txtName);
+        }else{
+            promptHandler(@"");
+        }
+        promptHandler=nil;
+        txtName=nil;
+    }
+}
+
+
+-(UIViewController *)getCurrentVC
+{
+    UIViewController *result = nil;
+    UIWindow * window = [[[UIApplication sharedApplication] windows] firstObject];
+    if (window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tempWindow in windows)
+        {
+            if (tempWindow.windowLevel == UIWindowLevelNormal)
+            {
+                window = tempWindow;
+                break;
+            }
+        }
+    }
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    id nextResponder = [frontView nextResponder];
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else
+        result = window.rootViewController;
+    return result;
 }
 
 @end
