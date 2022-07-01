@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
  An javascript bridge for calling functions synchronously and asynchronously
                    DESC
 
-  s.homepage     = "https://github.com/wendux/DSBridge-IOS.git"
+  s.homepage     = "https://github.com/1987zcc/DSBridge-IOS-fix.git"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/wendux/DSBridge-IOS.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/1987zcc/DSBridge-IOS-fix.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
