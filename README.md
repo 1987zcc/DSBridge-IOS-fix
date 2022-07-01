@@ -51,7 +51,7 @@ DSBridge v3.0 is a milestone version. Compared with v2.0, we have made a lot of 
 ## Installation
 
 ```shell
-pod "dsBridge"
+pod "DSBridge-IOS-fix"
 ```
 
 
