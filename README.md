@@ -1,3 +1,6 @@
+### Notice
+修复iOS15下的问题，兼容最新的xcode13建立的项目。
+
 English| [中文简体](https://github.com/wendux/DSBridge-IOS/blob/master/readme-chs.md)   
 # DSBridge  for  IOS
 
